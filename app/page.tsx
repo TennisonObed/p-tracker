@@ -12,6 +12,7 @@ export default function Home() {
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(167,139,250,0.2),_transparent_35%)]">
       <div className="flex min-h-screen">
         <Navbar />
+        Hello
 
         <main className="flex-1 p-6 lg:p-10">
           <div className="rounded-[28px] border border-violet-100 bg-white p-8 shadow-[0_16px_45px_-25px_rgba(91,33,182,0.35)]">
