@@ -13,7 +13,6 @@ export default function Projects() {
 
         <div className="flex min-h-screen">
             <Navbar />
-
             <h1>Project Page</h1>
         </div>
 
