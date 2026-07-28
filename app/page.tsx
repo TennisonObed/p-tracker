@@ -1,4 +1,7 @@
+"use client";
+
 import Navbar from "@/components/Navbar";
+import { useAuth } from "@/context/AuthContext";
 
 const stats = [
   { label: "Total Projects", value: "8", accent: "bg-violet-50 text-violet-700" },
@@ -8,10 +11,24 @@ const stats = [
 ];
 
 export default function Home() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-950">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-violet-100 border-t-violet-600"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(167,139,250,0.2),_transparent_35%)]">
       <div className="flex min-h-screen">
         <Navbar />
+
+
+
+
 
         <main className="flex-1 p-6 lg:p-10">
           <div className="rounded-[28px] border border-violet-100 bg-white p-8 shadow-[0_16px_45px_-25px_rgba(91,33,182,0.35)]">
@@ -21,7 +38,7 @@ export default function Home() {
                   Overview
                 </p>
                 <h1 className="mt-3 text-3xl font-semibold text-slate-900">
-                  Welcome back, Alex
+                  Welcome back, {user?.name || "User"}
                 </h1>
                 <p className="mt-3 max-w-2xl text-lg text-slate-600">
                   Here is a quick snapshot of your project activity and priorities.
@@ -73,7 +90,14 @@ export default function Home() {
             </div>
           </div>
         </main>
+
+
       </div>
     </div>
   );
 }
+
+
+
+
+
