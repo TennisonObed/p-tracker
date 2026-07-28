@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export interface AuthUser {
   id: string;
@@ -24,9 +24,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const pathName = usePathname();
+  console.log("pathName ", pathName);
+
+
+
+  // useEffect(() => {
+  //   const checkAuth = async () => {
+  //     try {
+  //       const res = await fetch("/api/auth/me");
+  //       if (res.ok) {
+  //         const data = await res.json();
+  //         setUser(data.user);
+  //       } else {
+  //         setUser(null);
+  //       }
+  //     } catch {
+  //       setUser(null);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   checkAuth();
+  // }, [pathName]);
+
+
+
 
   const fetchUser = useCallback(async () => {
     try {
+      if (pathName === "/login" || pathName === "/register") return;
       const res = await fetch("/api/auth/me");
       if (res.ok) {
         const data = await res.json();
@@ -39,7 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [pathName]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect

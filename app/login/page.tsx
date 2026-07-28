@@ -37,7 +37,7 @@ export default function LoginPage() {
       }
 
       // Redirect to home / projects page on successful login
-      router.push("/projects");
+      router.push("/");
       router.refresh();
     } catch (err: unknown) {
       if (err instanceof Error) {
