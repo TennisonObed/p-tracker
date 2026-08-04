@@ -8,6 +8,7 @@ export interface AuthUser {
   name: string;
   email: string;
   role: "user" | "admin";
+  subscriptionPlan: "free" | "pro";
 }
 
 interface AuthContextType {

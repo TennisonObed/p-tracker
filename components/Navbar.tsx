@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 const navigation = [
   {
@@ -19,6 +20,24 @@ const navigation = [
     icon: (
       <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 6.75A2.25 2.25 0 0 1 6.75 4.5h2.25a2.25 2.25 0 0 1 2.25 2.25v2.25H4.5zM4.5 14.25A2.25 2.25 0 0 1 6.75 12h2.25a2.25 2.25 0 0 1 2.25 2.25v2.25H4.5zM13.5 6.75A2.25 2.25 0 0 1 15.75 4.5h2.25a2.25 2.25 0 0 1 2.25 2.25v2.25H13.5zM13.5 14.25A2.25 2.25 0 0 1 15.75 12h2.25a2.25 2.25 0 0 1 2.25 2.25v2.25H13.5z" />
+      </svg>
+    ),
+  },
+  {
+    name: "Team",
+    href: "/team",
+    icon: (
+      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.109A11.386 11.386 0 0 1 10.089 18H8.25c-.621 0-1.125-.504-1.125-1.125V18M11.25 7.5A3.75 3.75 0 1 1 7.5 11.25 3.75 3.75 0 0 1 11.25 7.5ZM17.25 9.75a2.25 2.25 0 1 1-2.25 2.25 2.25 2.25 0 0 1 2.25-2.25Z" />
+      </svg>
+    ),
+  },
+  {
+    name: "Pricing",
+    href: "/pricing",
+    icon: (
+      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75-3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V14" />
       </svg>
     ),
   },
@@ -45,6 +64,7 @@ const navigation = [
 ];
 
 export default function Navbar() {
+  const { user } = useAuth();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -137,9 +157,24 @@ export default function Navbar() {
         </nav>
 
         <div className={`rounded-2xl border border-violet-400/20 bg-white/10 p-4 ${isExpanded || isMobile ? "block" : "hidden"}`}>
-          <p className="text-sm font-semibold">Welcome back</p>
-          <p className="mt-1 text-sm text-violet-100/70">
-            Keep your projects moving with a calm, focused view.
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-sm font-semibold truncate">
+              {user?.name || "Welcome back"}
+            </p>
+            {user?.subscriptionPlan === "pro" ? (
+              <span className="rounded-md bg-amber-400/20 px-2 py-0.5 text-[10px] font-extrabold text-amber-300 ring-1 ring-amber-400/30 uppercase tracking-wider shrink-0">
+                PRO
+              </span>
+            ) : (
+              <span className="rounded-md bg-white/10 px-2 py-0.5 text-[10px] font-semibold text-violet-200 uppercase tracking-wider shrink-0">
+                FREE
+              </span>
+            )}
+          </div>
+          <p className="mt-1.5 text-xs text-violet-200/70">
+            {user?.subscriptionPlan === "pro"
+              ? "Premium workspace unlocked"
+              : "Upgrade to share tasks with your team"}
           </p>
         </div>
       </aside>

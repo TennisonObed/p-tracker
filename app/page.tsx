@@ -42,8 +42,9 @@ export default function Home() {
     try {
       await addProject(newTitle);
       setNewTitle("");
-    } catch (err: any) {
-      setError(err.message || "Failed to create project");
+    } catch (err) {
+      const errorObj = err as Error;
+      setError(errorObj.message || "Failed to create project");
     } finally {
       setIsAdding(false);
     }
