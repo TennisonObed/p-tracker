@@ -1,26 +1,34 @@
-"use client";
-
-import { useState } from "react";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import Navbar from "@/components/Navbar";
-import { useAuth } from "@/context/AuthContext";
-import { useProjects } from "@/context/ProjectContext";
+import AddProjectForm from "@/components/AddProjectForm";
+import { verifyToken } from "@/lib/auth";
+import { connectDB } from "@/lib/db";
+import { Project } from "@/lib/models/Project";
+import { User } from "@/lib/models/User";
 
-export default function Home() {
-  const { user, loading: authLoading } = useAuth();
-  const { projects, loading: projectsLoading, addProject } = useProjects();
-  const [newTitle, setNewTitle] = useState("");
-  const [isAdding, setIsAdding] = useState(false);
-  const [error, setError] = useState("");
+export default async function Home() {
+  const token = (await cookies()).get("token")?.value;
+  const payload = token ? verifyToken(token) : null;
 
-  if (authLoading || projectsLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-950">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-violet-100 border-t-violet-600"></div>
-      </div>
-    );
+  // Middleware only checks that a token cookie exists (it can't verify a JWT
+  // signature in the Edge runtime), so this route must independently verify
+  // it before touching the database. Reject expired/tampered tokens here.
+  if (!payload) {
+    redirect("/login");
   }
 
-  // Calculate stats dynamically from context data
+  await connectDB();
+
+  const [user, projects] = await Promise.all([
+    User.findById(payload.userId).select("name").lean(),
+    Project.find({ user: payload.userId }).sort({ createdAt: -1 }).lean(),
+  ]);
+
+  if (!user) {
+    redirect("/login");
+  }
+
   const totalProjects = projects.length;
   const inProgressCount = projects.filter((p) => p.status === "in-progress").length;
   const completedCount = projects.filter((p) => p.status === "completed").length;
@@ -32,23 +40,6 @@ export default function Home() {
     { label: "Completed", value: completedCount.toString(), accent: "bg-emerald-50 text-emerald-700" },
     { label: "To Do", value: todoCount.toString(), accent: "bg-slate-100 text-slate-700" },
   ];
-
-  const handleAddProject = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newTitle.trim()) return;
-
-    setIsAdding(true);
-    setError("");
-    try {
-      await addProject(newTitle);
-      setNewTitle("");
-    } catch (err) {
-      const errorObj = err as Error;
-      setError(errorObj.message || "Failed to create project");
-    } finally {
-      setIsAdding(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(167,139,250,0.2),_transparent_35%)]">
@@ -62,7 +53,7 @@ export default function Home() {
                   Overview
                 </p>
                 <h1 className="mt-3 text-3xl font-semibold text-slate-900">
-                  Welcome back, {user?.name || "User"}
+                  Welcome back, {user.name || "User"}
                 </h1>
                 <p className="mt-3 max-w-2xl text-lg text-slate-600">
                   Here is a quick snapshot of your project activity and priorities.
@@ -100,26 +91,7 @@ export default function Home() {
                     Start a new project by entering a title below.
                   </p>
                 </div>
-                <form onSubmit={handleAddProject} className="flex w-full max-w-md flex-col gap-3 sm:flex-row">
-                  <div className="flex-1">
-                    <input
-                      type="text"
-                      value={newTitle}
-                      onChange={(e) => setNewTitle(e.target.value)}
-                      placeholder="Project title"
-                      className="w-full rounded-2xl border border-violet-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none ring-0 placeholder:text-slate-400"
-                      disabled={isAdding}
-                    />
-                    {error && <p className="mt-1 text-xs text-rose-500">{error}</p>}
-                  </div>
-                  <button
-                    type="submit"
-                    className="h-[46px] rounded-2xl bg-violet-600 px-6 text-sm font-semibold text-white transition hover:bg-violet-700 disabled:opacity-50"
-                    disabled={isAdding || !newTitle.trim()}
-                  >
-                    {isAdding ? "Adding..." : "Add Project"}
-                  </button>
-                </form>
+                <AddProjectForm />
               </div>
             </div>
           </div>
