@@ -1178,14 +1178,14 @@ Use this checklist to track where the session actually is. At every major step: 
 - [x] Showed the complete pipeline diagram again
 
 ## 30–45 min — AI-Assisted CI Setup
-- [ ] Verified app locally (`npm install`, `npm run dev`)
-- [ ] Verified `npm run build` works
-- [ ] Verified project is pushed to GitHub
-- [ ] Used AI prompt pattern to generate `.github/workflows/ci.yml`
-- [ ] Read/explained the generated YAML with AI's help
+- [x] Verified app locally (`npm run build`, `npm run lint`)
+- [x] Verified `npm run build` works
+- [x] Verified project is pushed to GitHub
+- [x] Used AI prompt pattern to generate `.github/workflows/ci.yml`
+- [x] Read/explained the generated YAML with AI's help
 
 ## 45–60 min — Run and Debug CI
-- [ ] Pushed workflow, watched it run in GitHub Actions
+- [x] Pushed workflow, watched it run in GitHub Actions
 - [ ] Located workflow/jobs/steps/logs in the GitHub UI
 - [ ] (If time) Introduced a controlled failure (e.g. lint error)
 - [ ] Used AI debugging prompt to diagnose the failure
