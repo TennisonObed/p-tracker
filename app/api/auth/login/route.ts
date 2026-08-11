@@ -5,7 +5,9 @@ import { User } from "@/lib/models/User";
 import { signToken } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
+  
   try {
+
     const { email, password } = await req.json();
 
     // 1. Validation
