@@ -1186,23 +1186,23 @@ Use this checklist to track where the session actually is. At every major step: 
 
 ## 45–60 min — Run and Debug CI
 - [x] Pushed workflow, watched it run in GitHub Actions
-- [ ] Located workflow/jobs/steps/logs in the GitHub UI
-- [ ] (If time) Introduced a controlled failure (e.g. lint error)
-- [ ] Used AI debugging prompt to diagnose the failure
-- [ ] Fixed and re-pushed, confirmed pipeline passes
+- [x] Located workflow/jobs/steps/logs in the GitHub UI
+- [ ] (If time — skipped, optional) Introduced a controlled failure (e.g. lint error)
+- [ ] (skipped with above) Used AI debugging prompt to diagnose the failure
+- [ ] (skipped with above) Fixed and re-pushed, confirmed pipeline passes
 
 ## 60–75 min — Deployment Concepts
-- [ ] Explained server / instance / public IP / SSH
-- [ ] Explained env variables vs GitHub Secrets
-- [ ] Confirmed Lightsail instance is reachable (already running — no setup needed)
+- [x] Explained server / instance / public IP / SSH
+- [x] Explained env variables vs GitHub Secrets
+- [x] Confirmed Lightsail instance is reachable (already running — no setup needed)
 
 ## 75–105 min — Deploy Next.js
-- [ ] Used AI to help generate deploy commands/workflow
-- [ ] Manually deployed once to confirm the Lightsail path works
-- [ ] Verified live app is reachable in browser
+- [x] Used AI to help generate deploy commands/workflow
+- [x] Manually deployed once to confirm the Lightsail path works
+- [x] Verified live app is reachable in browser
 
 ## 105–115 min — Automate Deployment
-- [ ] Added deploy step to the workflow (push → CI → build → deploy)
+- [x] Added deploy step to the workflow (push → CI → build → deploy)
 - [ ] Pushed a real change and confirmed auto-deploy end-to-end
 
 ## 115–120 min — Final Recap

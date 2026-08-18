@@ -23,3 +23,21 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           RAZORPAY_KEY_ID: ${{ secrets.RAZORPAY_KEY_ID }}
           RAZORPAY_KEY_SECRET: ${{ secrets.RAZORPAY_KEY_SECRET }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Deploy to Lightsail
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.LIGHTSAIL_HOST }}
+          username: ${{ secrets.LIGHTSAIL_USERNAME }}
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          script: |
+            cd ~/p-tracker
+            git pull
+            npm ci
+            npm run build
+            pm2 restart p-tracker
