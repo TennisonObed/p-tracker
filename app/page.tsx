@@ -54,7 +54,7 @@ export default async function Home() {
                   Overview
                 </p>
                 <h1 className="mt-3 text-3xl font-semibold text-slate-900">
-                  Welcome back, {user.name || "User"}
+                  Hello Welcome, {user.name || "User"}
                 </h1>
                 <p className="mt-3 max-w-2xl text-lg text-slate-600">
                   Here is a quick snapshot of your project activity and priorities.
