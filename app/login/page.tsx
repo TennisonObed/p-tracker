@@ -55,7 +55,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md space-y-8 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <div>
           <h2 className="text-center text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Welcome Back
+            Hello Welcome Back........
           </h2>
           <p className="mt-2 text-center text-sm text-slate-600 dark:text-slate-400">
             Sign in to access your <span className="font-semibold text-indigo-600 dark:text-indigo-400">P-Tracker</span> projects
