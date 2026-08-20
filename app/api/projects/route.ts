@@ -2,11 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
 import { Project } from "@/lib/models/Project";
+import logger from "@/lib/logger";
 
 export async function GET(req: NextRequest) {
   try {
     const token = req.cookies.get("token")?.value;
     if (!token) {
+      logger.warn("GET Projects Error: No token provided");
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
@@ -17,10 +19,10 @@ export async function GET(req: NextRequest) {
 
     await connectDB();
     const projects = await Project.find({ user: payload.userId }).sort({ createdAt: -1 });
-
+    logger.info(`Fetched ${projects.length} projects for user ${token}`);
     return NextResponse.json({ projects }, { status: 200 });
   } catch (error) {
-    console.error("GET Projects Error:", error);
+    logger.error(`GET Projects Error: ${error}`);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -51,9 +53,10 @@ export async function POST(req: NextRequest) {
       user: payload.userId,
     });
 
+    logger.info(`Project created: "${newProject.title}" by user ${payload.userId}`);
     return NextResponse.json({ project: newProject }, { status: 201 });
   } catch (error) {
-    console.error("POST Project Error:", error);
+    logger.error(`POST Project Error: ${error}`);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
